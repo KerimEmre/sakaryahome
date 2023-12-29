@@ -1,0 +1,60 @@
+<div class="mt-4" *ngIf="checkoutForm" [formGroup]="checkoutForm">
+    <div class="row" formGroupName="deliveryForm">
+        <div class="col-12">
+            <h6 class="text-muted" > 
+                <strong style="color:green;">Following are the delivery methods you can choose.</strong>
+            </h6>
+            
+        </div>
+        <!-- Eğer logisticOptionDisabled false ise, tüm yöntemleri göster -->
+        <ng-container *ngIf="!logisticOptionDisabled">
+            <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
+                <input type="radio"
+                    id="{{method.id}}"
+                    value="{{method.id}}"
+                    formControlName="deliveryMethod"
+                    class="form-check-input"
+                    (click)="setShippingPrice(method)">
+                <label for="{{method.id}}" class="form-check-label ms-2 mb-3">
+                    <strong>{{method.shortName}} - {{method.price | currency}}</strong>
+                    <br />
+                    <span class="label-description">{{method.description}}</span><br>
+                    <span class="label-description">{{method.deliveryTime}}</span>
+                </label>
+            </div>
+        </ng-container>
+        <!-- Eğer logisticOptionDisabled true ise ve yöntemin id'si 3 ise, sadece bu yöntemi göster -->
+        <ng-container *ngIf="logisticOptionDisabled">
+            <div>
+                <h6 class="text-muted" > 
+                    <p style="color:rgb(255, 85, 6);">You can only choose "Logistic" because you exceeded the maximum desi or there are items in the cart that require logistics</p>
+                </h6>
+            </div>
+            <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
+                <input *ngIf="method.id === 3" type="radio"
+                    id="{{method.id}}"
+                    value="{{method.id}}"
+                    formControlName="deliveryMethod"
+                    class="form-check-input"
+                    (click)="setShippingPrice(method)">
+                <label *ngIf="method.id === 3" for="{{method.id}}" class="form-check-label ms-2 mb-3">
+                    <strong>{{method.shortName}} - {{method.price | currency}}</strong>
+                    <br />
+                    <span class="label-description">{{method.description}}</span><br>
+                    <span class="label-description">{{method.deliveryTime}}</span>
+                    
+                </label>
+                
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between flex-row mb-5">
+    <button class="btn btn-outline-primary" cdkStepperPrevious>
+        <i class="fa fa-angle-left"></i> Back to address
+    </button>
+    <button class="btn btn-primary" cdkStepperNext>
+        Go to Review <i class="fa fa-angle-right"></i> 
+    </button>
+</div>
